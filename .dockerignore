@@ -1,0 +1,3 @@
+srcs/backend/node_modules
+srcs/backend/dist
+srcs/frontend/node_modules

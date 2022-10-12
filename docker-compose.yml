@@ -1,0 +1,58 @@
+version: "3.3"
+
+networks:
+  app_net:
+   driver: bridge
+
+services:
+  db:
+    image: postgres
+    container_name: db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
+    networks:
+      - app_net
+    volumes:
+      - trdb:/var/lib/postgresql/data
+    networks:
+      - app_net
+    restart: always
+  
+  front:
+    build: ./
+    container_name: front
+    volumes:
+      - ./srcs/frontend/:/app
+    restart: always
+    ports:
+      - 3000:3000
+    command: sh -c 'npm install && npm start'
+    networks:
+      - app_net
+
+  back:
+    build: ./
+    container_name: back
+    restart: always
+    volumes:
+      - ./srcs/backend/:/app
+    networks:
+     - app_net
+    ports:
+     - 3334:3334
+     - 5555:5555
+    depends_on:
+     - db
+    command: sh -c 'npm install && npx prisma db push && npm run start:dev'
+
+volumes:
+  trdb:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/eharuni/devdb

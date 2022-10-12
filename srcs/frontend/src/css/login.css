@@ -1,0 +1,9 @@
+.main-div{
+	width: 100vw;
+	height: 100vh;
+	background-image: url('../images/intra-bg.jpg');
+	background-size: cover;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
